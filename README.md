@@ -38,6 +38,9 @@ You can also run the application using Docker compose:
 ```
 The application will be running on `http://localhost:5000`.
 
+## API Documentation
+Full API documentation is available at `/api/docs` when running the application.
+
 ## Example HTTP Requests
 
 ### 1. Create a New User
@@ -120,9 +123,6 @@ Response:
     }
 ]
 ```
-
-## API Documentation
-Full API documentation is available at `/api/docs` when running the application.
 
 ### Key Endpoints
 
