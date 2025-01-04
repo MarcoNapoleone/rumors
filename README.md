@@ -14,22 +14,22 @@ RUMORS is a framework designed to implement RESTful APIs for a Recommender Syste
 
 ## Running the Application
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/rumors.git
-    cd rumors
-    ```
+Clone the repository:
+ ```sh
+ git clone https://github.com/yourusername/rumors.git
+ cd rumors
+ ```
 
-2. Install dependencies:
+1. Install dependencies:
     ```sh
     pip install -r requirements.txt
     ```
 
-3. Run the application:
+2. Run the application:
     ```sh
-    python ./run.py
+    python run.py
     ```
-   The application will be running on `http://localhost:5000`.
+The application will be running on `http://localhost:5000`.
 
 ### Docker
 You can also run the application using Docker compose:
@@ -40,6 +40,7 @@ The application will be running on `http://localhost:5000`.
 
 ## API Documentation
 Full API documentation is available at `/api/docs` when running the application.
+You can also check the swagger.json in directory `static/swagger.json`
 
 ## Example HTTP Requests
 
@@ -62,8 +63,6 @@ Response:
 {
     "user": {
         "test_group": "A",
-        "email": "user@example.com",
-        "age": 18,
         "browser": "Chrome",
         "os": "Windows",
         "language": "en-US"
