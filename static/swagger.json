@@ -1,0 +1,746 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "RUMORS APIs",
+    "description": "RESTful Utilities for Movies Online Recommender System",
+    "version": "1.0.0"
+  },
+  "host": "",
+  "basePath": "/api",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "jwt": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "jwt": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Operations related to users"
+    },
+    {
+      "name": "Recommendations",
+      "description": "Operations related to recommendations"
+    },
+    {
+      "name": "Ratings",
+      "description": "Operations related to ratings"
+    },
+    {
+      "name": "Movies",
+      "description": "Operations related to movies"
+    }
+  ],
+  "paths": {
+    "/users/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieve a list of all users",
+        "security": [
+          {}
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {}
+        ],
+        "summary": "Add a new user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User added",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "$ref": "#/definitions/User"
+                },
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in creating the user",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieve user information",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user information",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/ocean": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Calculate OCEAN scores for a user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID of the user"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OCEAN scores calculated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Openness": {
+                  "type": "number"
+                },
+                "Conscientiousness": {
+                  "type": "number"
+                },
+                "Extraversion": {
+                  "type": "number"
+                },
+                "Agreeableness": {
+                  "type": "number"
+                },
+                "Neuroticism": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "User not found or personality scores not found"
+          }
+        }
+      }
+    },
+    "/users/{id}/recommendations/": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieve user recommendations",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of recommendations",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Recommendation"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/ratings/": {
+      "get": {
+        "tags": [
+          "Users",
+          "Ratings"
+        ],
+        "summary": "Retrieve user ratings",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of ratings",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Rating"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users",
+          "Ratings"
+        ],
+        "summary": "Add a new user rating",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewRating"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Rating added",
+            "schema": {
+              "$ref": "#/definitions/Rating"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users",
+          "Ratings"
+        ],
+        "summary": "Delete all user ratings",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ratings deleted"
+          }
+        }
+      }
+    },
+    "/recommendations/{id}/": {
+      "get": {
+        "tags": [
+          "Recommendations"
+        ],
+        "summary": "Retrieve recommendation information",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recommendation information",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Recommendation"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Recommendations"
+        ],
+        "summary": "Provide feedback on recommendations",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RecommendationFeedback"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of recommendations",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Recommendation"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/recommendations/{id}/explain": {
+      "get": {
+        "tags": [
+          "Recommendations"
+        ],
+        "summary": "Explain a recommendation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Explanation of recommendation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "explanation": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items/": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "security": [
+          {}
+        ],
+        "summary": "Retrieve a list of all movies",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Search parameter for movie name"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "Sort parameter",
+            "enum": [
+              "title",
+              "imdbId",
+              "genres",
+              "relevance"
+            ]
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "description": "Maximum number of results to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of movies",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Movie"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items/{id}/": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "security": [
+          {}
+        ],
+        "summary": "Retrieve movie information",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie information",
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          }
+        }
+      }
+    },
+    "/items/{id}/ratings": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "security": [
+          {}
+        ],
+        "summary": "Retrieve movie ratings",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of ratings",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Rating"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "test_group": {
+          "type": "string",
+            "enum": [
+                "A",
+                "B"
+            ]
+        },
+        "email": {
+          "type": "string"
+        },
+        "age": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 120,
+          "default": 18
+        },
+        "gender": {
+          "type": "string"
+        },
+        "job": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "education": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "browser": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "personality": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "ratings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Rating"
+          }
+        }
+      }
+    },
+    "Rating": {
+      "type": "object",
+      "properties": {
+        "item_id": {
+          "type": "string"
+        },
+        "score": {
+          "type": "integer"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Recommendation": {
+      "type": "object",
+      "properties": {
+        "item_id": {
+          "type": "string"
+        },
+        "pred_score": {
+          "type": "number"
+        },
+        "is_known": {
+          "type": "boolean"
+        },
+        "convincing_score": {
+          "type": "number",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "resonates_score": {
+          "type": "number",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "determinant_score": {
+          "type": "number",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "comment": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Movie": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "genres": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "imdb_id": {
+          "type": "string"
+        },
+        "tmdb_id": {
+          "type": "string"
+        }
+      }
+    },
+    "NewUser": {
+      "type": "object",
+      "properties": {
+        "browser": {
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        }
+      }
+    },
+    "NewRating": {
+      "type": "object",
+      "properties": {
+        "item_id": {
+          "type": "string"
+        },
+        "score": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "item_id",
+        "score"
+      ]
+    },
+    "RecommendationFeedback": {
+      "type": "object",
+      "properties": {
+        "is_known": {
+          "type": "boolean"
+        },
+        "convincing_score": {
+          "type": "number",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "resonates_score": {
+          "type": "number",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "determinant_score": {
+          "type": "number",
+          "enum": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "item_id",
+        "score",
+        "pred_score",
+        "is_known"
+      ]
+    }
+  },
+  "x-environments": {
+    "localhost": {
+      "host": "localhost:5000"
+    },
+    "azure": {
+      "host": "rumors.azurewebsites.net"
+    }
+  }
+}

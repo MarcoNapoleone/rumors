@@ -1,0 +1,58 @@
+services:
+  web:
+    build: .
+    container_name: rumors_flask_app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    networks:
+      app-network:
+        ipv4_address: 172.20.0.3  # Static IP address for the web service
+
+  mongo:
+    image: mongo:latest
+    container_name: rumors_mongo_db
+    volumes:
+      - ./mongo:/docker-entrypoint-initdb.d
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      app-network:
+        ipv4_address: 172.20.0.2  # Static IP address for the mongo service
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles:
+      - ollama
+    container_name: rumors_ollama
+    ports:
+      - "7869:11434"
+    volumes:
+      - llama-data:/root/.ollama
+      - ./ollama/entrypoint.sh:/entrypoint.sh
+    pull_policy: always
+    tty: true
+    restart: always
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+      - MODEL_NAME=llama3
+    networks:
+      app-network:
+        ipv4_address: 172.20.0.4
+    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+
+volumes:
+  mongo-data:
+    driver: local
+  llama-data:  # define a volume for the ollama service
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16  # Define a subnet for the network
